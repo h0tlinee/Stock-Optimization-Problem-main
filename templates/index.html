@@ -1,0 +1,26 @@
+{%extends "base.html" %}
+
+
+
+{%block content%}
+
+    <div class="cells_window">
+    {%for cell in all%}
+        {%include "cell.html"%}
+    {%endfor%}
+    </div>
+    <div class="side_panel">
+        <form method='post' action='/swap'>
+            <button type='submit' class='optimizator_start' >Модуляция перемещения товаров</button>
+        </form>
+
+        <form method='post' action='/add_quantity'>
+            <button type='submit' class='cells_add_quantity' >Модуляция добавления товаров</button>
+        </form>
+        <form method='post' action='/remove_quantity'>
+            <button type='submit' class='cells_remove_quantity' >Модуляция удаления товаров</button>
+        </form>
+         
+    </div>
+
+{%endblock%}
