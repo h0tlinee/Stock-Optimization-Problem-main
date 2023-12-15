@@ -3,23 +3,88 @@
 
 
 {%block content%}
-
+{% for msg in get_flashed_messages() %}
+                             <div class="flash">{{msg}}</div>
+                         {%endfor%}
+    {%if flag_loaded==True%}
+        <div class="cur_file">
+            <h3 id="file">Текущий файл: {{path}}</h3>
+        </div>
+    {%endif%}
     <div class="cells_window">
-    {%for cell in all%}
-        {%include "cell.html"%}
+    
+    {%if flag_loaded==True%}
+    {%for i in range(0,params[0])%}
+    <div class="shelf" style="border: 2px solid black;display: inline-block;">
+        {%for j in range(params[1])%}
+            {%for k in range(0,params[2])%}
+                {%set cell=all[i*params[1]*params[2]+j*params[2]+k]%}
+                
+                {%include "cell.html"%}
+                
+            {%endfor%}
+             </br>
+    
+        {%endfor%}
+    </div>
     {%endfor%}
+    {%endif%}
+    <!--{%for cell in all%}
+        {%include "cell.html"%}
+    {%endfor%}-->
     </div>
     <div class="side_panel">
-        <form method='post' action='/swap'>
-            <button type='submit' class='optimizator_start' >Модуляция перемещения товаров</button>
+        <form method='post' action='/db_load'>
+            <input type="file" id="db_load" name="db"></input>
+            <button type='submit' class='db_load' >Загрузить БД</button>
         </form>
 
-        <form method='post' action='/add_quantity'>
-            <button type='submit' class='cells_add_quantity' >Модуляция добавления товаров</button>
-        </form>
-        <form method='post' action='/remove_quantity'>
-            <button type='submit' class='cells_remove_quantity' >Модуляция удаления товаров</button>
-        </form>
+        
+        <script>
+        document.getElementById('db_load').onchange = function () {
+            //alert('Selected file: ' + this.value);
+            const s=this.value;
+            a=JSON.stringify(s);
+            $.ajax({
+                url:"/test",
+                type:"POST",
+                contentType:"application/json",
+                data:JSON.stringify(s)
+
+
+            });
+            
+          };
+        </script>
+        {%if flag_loaded==True%}
+            <form method='post' action='/swap'>
+                <button type='submit' class='optimizator_start' >Модуляция перемещения товаров</button>
+            </form>
+
+            <form method='post' action='/add_quantity'>
+                <button type='submit' class='cells_add_quantity' >Модуляция добавления товаров</button>
+            </form>
+            <form method='post' action='/remove_quantity'>
+                <button type='submit' class='cells_remove_quantity' >Модуляция удаления товаров</button>
+            </form>
+            <form method='post' action='/config_edit' id='config_form'>
+                <div class='cont'>
+                <label for="shelf_number">Шкафы:</label>
+                </div>
+                <input type='number' id='shelf_number' name='rows'></input></br>
+                <div class='cont'>
+                <label for="height_number">Полки:</label>
+                </div>
+                <input type='number' id='height_number' name='height'></input></br>
+                <div class='cont'>
+                <label for="length_number">Ячейки:</label>
+                </div>
+                <input type='number' id='length_number' name='length'></input>
+                <button type='submit' class='edit_config' >Изменить конфигурацию склада</button>
+                
+            </form>
+        
+        {%endif%}
          
     </div>
 

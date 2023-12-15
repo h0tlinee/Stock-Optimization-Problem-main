@@ -2,6 +2,7 @@
 from statistics import quantiles
 from Optimizator import Optimizator
 from Cell import Cell
+import math
 import pandas as pd
 
 class Stock():
@@ -32,6 +33,8 @@ class Stock():
                 types.append(i[2])
             df1 = pd.DataFrame({'id':ids, 'quantity': quantities, 'type': types})
             df2 = pd.DataFrame({'i': [self.__db_params[0]], 'j': [self.__db_params[1]], 'k': [self.__db_params[2]], 'size': [self.__db_params[3]]})
+            #print('df2:')
+            #print(df2)
             with pd.ExcelWriter(self.__db_adress, engine="xlsxwriter", mode='w') as excel_writer:
                 df1.to_excel(excel_writer, sheet_name='stock')
                 df2.to_excel(excel_writer, sheet_name='params')
@@ -232,11 +235,16 @@ class Stock():
         params = [int(df.iloc[0]['i']), int(df.iloc[0]['j']), int(df.iloc[0]['k']), int(df.iloc[0]['size'])]
         x = pd.ExcelFile(db_adress)
         df = x.parse('stock')
+        print(df)
         for i in range(params[0]*params[1]*params[2]):
-            cell_id = str(df.iloc[i]['id'])
+            cell_id = str(int((df.iloc[i]['id'])))
             while len(cell_id) < 4:
                 cell_id = '0' + cell_id
-            result.append([cell_id, int(df.iloc[i]['quantity']), str(df.iloc[i]['type'])])
+            if(math.isnan(df.iloc[i]['type'])):
+                result.append([cell_id, int(df.iloc[i]['quantity']), 'None'])
+            else:
+                result.append([cell_id, int(df.iloc[i]['quantity']), str(int((df.iloc[i]['type'])))])
+        print(result)
         return params, result
 
 

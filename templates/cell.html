@@ -2,10 +2,10 @@
 <html lang="en">
 <html>
 <body>
-    <div class="cell" style="background-color:{%if cell[2]!='None'%}{{colors[int(cell[2])]}}{% endif %}">
-        <p class="cell_id">Номер ячейки: {%print(cell[0])%}</p>
-        <p class="cell_quantity">Количество: {%print(cell[1])%}</p>
-        <p class="cell_type">Тип товара: {%print(cell[2])%}</p>
+    <div class="cell" style="background-color:{%if cell[2]!='None'%}{{colors[int(cell[2])]}}{% endif %};">
+        <p class="cell_id" >ID: {%print(cell[0])%}</p>
+        <p class="cell_quantity">Кол-во: {%print(cell[1])%}</p>
+        <p class="cell_type">Тип: {%print(cell[2])%}</p>
     </div>
 
 
